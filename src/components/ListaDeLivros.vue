@@ -47,25 +47,25 @@ export default {
           livro.genero.includes(this.filtro)
         );
       }
-      if (this.filtro === "Todos") {
+      if (this.filtro == "Todos") {
         this.livros = this.listaLivro;
-      }else{
-        this.livros = this.listaLivro
       }
     },
     carregaDado() {
       const db = getDatabase();
       const livros = ref(db, "/livros");
       onValue(livros, (snapshot) => {
+        if(snapshot.val() === null){
+          return ''
+        }
         const data = snapshot.val();
-        Object.values(data).forEach((element) => {
-          this.listaLivro.push(element);
-        });
+        this.listaLivro = Object.values(data)
+        this.livros = this.listaLivro
       });
     },
-    deletaLivro(dado) {
+    async deletaLivro(dado) {
       const db = getDatabase();
-      remove(ref(db, "/livros/" + dado))
+      await remove(ref(db, "/livros/" + dado))
         .then(() => {
           console.log("deletado");
         })
