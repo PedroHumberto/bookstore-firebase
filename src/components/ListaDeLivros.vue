@@ -16,10 +16,10 @@
         <p>Autor: {{ livro.autor }}</p>
         <p>Genero: {{ livro.genero }}</p>
         <p>Descrição: {{ livro.descricao }}</p>
-        <router-link :to="{ name: 'altera', params: { id: livro.nome }}">
+        <router-link :to="{ name: 'altera', params: { id: livro.id }}">
           <button >Editar</button>
         </router-link>
-        <button @click.prevent="deletaLivro(livro.nome)">Deletar</button>
+        <button @click.prevent="deletelivro(livro.id)">Deletar</button>
         <hr />
       </li>
     </ul>
@@ -27,61 +27,49 @@
 </template>
 
 <script>
-import { getDatabase, ref, onValue, remove } from "firebase/database";
+import { useLoadlivros, deletelivro } from '@/firebase'
+
 export default {
+
   data() {
     return {
-      filtro: "Todos",
-      livros: [],
-      listaLivro: [],
-    };
+      livros: '',
+      filtro:'Todos',
+      listaLivro: []
+    }
   },
   mounted() {
-    //inicia com a lista de livros preenchida
-    this.filtraLivro();
-    //inicia o banco de dados
-    this.carregaDado();
+    this.loadLivros()
+
   },
   methods: {
-    filtraLivro() {
-      if (this.filtro) {
-        this.livros = this.listaLivro.filter((livro) =>
-          livro.genero.includes(this.filtro)
-        );
-      }
-      if (this.filtro == "Todos") {
-        this.livros = this.listaLivro;
-      }
+    loadLivros(){
+      this.listaLivro = useLoadlivros()
+      this.livros = useLoadlivros()
     },
-    carregaDado() {
-      const db = getDatabase();
-      const livros = ref(db, "/livros");
-      onValue(livros, (snapshot) => {
-        if(snapshot.val() === null){
-          return ''
-        }
-        const data = snapshot.val();
-        this.listaLivro = Object.values(data)
-        this.livros = this.listaLivro
-      });
+    filtraLivro(){
+       if (this.filtro) {
+         this.livros = this.listaLivro.filter((livro) =>
+           livro.genero.includes(this.filtro)
+         );
+       }
+       if (this.filtro == 'Todos') {
+         this.livros = this.listaLivro;
+       }
+      
     },
-    async deletaLivro(dado) {
-      const db = getDatabase();
-      await remove(ref(db, "/livros/" + dado))
-        .then(() => {
-          console.log(this.livros.length)
+    deletelivro(id){
+      
+        if(confirm('Confirma Operação?')){
           
-          console.log("deletado");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      },
+          deletelivro(id)
+        }
+        return ;
+      
+    }
   },
-  computed:{
-    
-  }
-};
+ 
+}
 </script>
 
 <style scoped>

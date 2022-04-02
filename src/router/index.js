@@ -19,12 +19,12 @@ const router = createRouter({
       component: () => import('../views/Cadastro.vue')
     },
     {
-      path: '/cadastro/:id',
+      path: '/edit/:id',
       name: 'altera',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/Cadastro.vue')
+      component: () => import('../views/Edit.vue')
     },
   
 

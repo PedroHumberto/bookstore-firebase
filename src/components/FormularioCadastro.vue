@@ -10,7 +10,6 @@
       <input type="text" id="url" v-model="livro.url" />
       <label for="genero">Genero:</label>
       <select v-model="livro.genero">
-        <option>Todos</option>
         <option value="Drama"> Drama</option>
         <option value="Ficção">Ficção</option>
         <option value="Terror">Terror</option>
@@ -25,51 +24,32 @@
 </template>
 
 <script>
-import { getDatabase, ref, set } from "firebase/database";
+//TESTE DE COMPOSITION
+import { createlivro } from '@/firebase'
+import { reactive } from 'vue'
 
 export default {
 
-  data() {
-    return {
-      
-      livro: {
-        nome: "",
-        autor: "",
-        url: "",
-        genero: "",
-        descricao: "",
-      },
-      id: this.$route.params.id
-    };
-  },
-  mounted(){
-    console.log(this.id)
-  },
-  
-  methods: {
-    //CRIAR VALIDAÇÃO DO FORMULARIO
-    cadastrar() {
-      const livros = this.livro;
-      const db = getDatabase();
+  setup() {
+    const livro = reactive({ nome: '', autor: '', url:'', genero:'', descricao:'' })
 
-      set(ref(db, "/livros/" + livros.nome), {
-        nome: livros.nome,
-        autor: livros.autor,
-        url: livros.url,
-        genero: livros.genero,
-        descricao: livros.descricao,
-      });
-    },
-  },
-  created(){
-    if(this.id){
-      this.livro.nome = this.id
+    const cadastrar = async () => {
+      await createlivro({ ...livro })
+      livro.nome = ''
+      livro.autor = ''
+      livro.url = ''
+      livro.genero = ''
+      livro.descricao = ''
     }
+    return { livro, cadastrar }
   }
-};
+}
 </script>
 
 <style scoped>
+.container{
+    width:500px;
+}
 .container form {
   display: flex;
   flex-direction: column;
