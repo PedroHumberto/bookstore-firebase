@@ -16,7 +16,9 @@
         <p>Autor: {{ livro.autor }}</p>
         <p>Genero: {{ livro.genero }}</p>
         <p>Descrição: {{ livro.descricao }}</p>
-        <button>Editar</button>
+        <router-link :to="{ name: 'altera', params: { id: livro.nome }}">
+          <button >Editar</button>
+        </router-link>
         <button @click.prevent="deletaLivro(livro.nome)">Deletar</button>
         <hr />
       </li>
@@ -67,6 +69,8 @@ export default {
       const db = getDatabase();
       await remove(ref(db, "/livros/" + dado))
         .then(() => {
+          console.log(this.livros.length)
+          
           console.log("deletado");
         })
         .catch((err) => {
@@ -74,6 +78,9 @@ export default {
         });
       },
   },
+  computed:{
+    
+  }
 };
 </script>
 

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <h1>Cadastre um Livro</h1>
     <form @submit.prevent="cadastrar">
       <label for="name">Nome:</label>
       <input type="text" id="name" v-model="livro.nome" />
@@ -24,14 +25,10 @@
 </template>
 
 <script>
-import Filtros from "./Filtros.vue";
 import { getDatabase, ref, set } from "firebase/database";
 
-
 export default {
-  components: {
-    Filtros,
-  },
+
   data() {
     return {
       
@@ -42,10 +39,15 @@ export default {
         genero: "",
         descricao: "",
       },
+      id: this.$route.params.id
     };
+  },
+  mounted(){
+    console.log(this.id)
   },
   
   methods: {
+    //CRIAR VALIDAÇÃO DO FORMULARIO
     cadastrar() {
       const livros = this.livro;
       const db = getDatabase();
@@ -57,10 +59,13 @@ export default {
         genero: livros.genero,
         descricao: livros.descricao,
       });
-
-  
     },
   },
+  created(){
+    if(this.id){
+      this.livro.nome = this.id
+    }
+  }
 };
 </script>
 

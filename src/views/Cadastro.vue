@@ -1,5 +1,4 @@
 <template>
-  <h1>Cadastre um livro</h1>
   <FormularioCadastro/>
 </template>
 
