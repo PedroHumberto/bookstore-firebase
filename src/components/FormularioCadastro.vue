@@ -3,6 +3,7 @@
     <h2>Cadastre um Livro</h2>
      <img :src="livro.url" :alt="livro.descricao" :title="livro.nome">
     <form @submit.prevent="cadastrar">
+      <MsgErro :msgErro="msgErro"/>
       <label for="name">Nome:</label>
       <input type="text" id="name" v-model="livro.nome" />
       <label for="name">Autor:</label>
@@ -29,18 +30,35 @@
 //TESTE DE COMPOSITION
 import { createlivro } from "@/firebase";
 import { reactive } from "vue";
+import MsgErro from './MensagemErro.vue'
 
 export default {
+  components:{
+    MsgErro
+  },
   setup() {
     const livro = reactive({
       nome: "",
       autor: "",
       url: "",
-      genero: "",
+      genero: "Drama",
       descricao: "",
     });
+    const msgErro = reactive([]);
 
     const cadastrar = async () => {
+      if (!livro.nome) {
+        return msgErro.push("Nome Obrigatório");
+      }
+      if (!livro.autor) {
+        return msgErro.push("Autor Obrigatório");
+      }
+      if (!livro.url) {
+        return msgErro.push("URL Obrigatório");
+      }
+      if (!livro.descricao) {
+        return msgErro.push("Descrição Obrigatória");
+      }
       await createlivro({ ...livro });
       livro.nome = "";
       livro.autor = "";
@@ -48,7 +66,7 @@ export default {
       livro.genero = "";
       livro.descricao = "";
     };
-    return { livro, cadastrar };
+    return { livro, cadastrar, msgErro };
   },
 };
 </script>
@@ -63,7 +81,10 @@ export default {
   display: flex;
   flex-direction: column;
 }
-button{
+.erro{
+  color: red
+}
+button {
   background-color: #4caf50; /* Green */
   border: none;
   border-radius: 10px;
@@ -80,7 +101,7 @@ button{
 input {
   width: 500px;
 }
-img{
+img {
   width: 50%;
 }
 </style>

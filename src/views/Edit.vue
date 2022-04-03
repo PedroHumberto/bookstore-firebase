@@ -2,6 +2,7 @@
   <div class="container">
     <h2>{{ livro.nome }}</h2>
     <img :src="livro.url" :alt="livro.descricao" :title="livro.nome" />
+    <MsgErro :msgErro="msgErro"/>
     <form @submit.prevent="update">
       <label for="name">Nome:</label>
       <input type="text" id="name" v-model="livro.nome" />
@@ -20,15 +21,20 @@
       </select>
       <label for="descricao">Descrição</label>
       <input type="text" id="descricao" v-model="livro.descricao" />
-      <button type="submit">Alterar</button>
+      <button class="verde" type="submit">Alterar</button>
     </form>
   </div>
 </template>
 
 <script>
 import { getlivro, updatelivro } from "@/firebase";
+import MsgErro from '../components/MensagemErro.vue'
+
 
 export default {
+  components:{
+    MsgErro
+  },
   data() {
     return {
       livro: {
@@ -39,6 +45,7 @@ export default {
         descricao: "",
       },
       livroId: this.$route.params.id,
+      msgErro: []
     };
   },
   async mounted() {
@@ -52,6 +59,18 @@ export default {
   },
   methods: {
     async update() {
+       if (!this.livro.nome) {
+        return this.msgErro.push("Nome Obrigatorio");
+      }
+      if (!this.livro.autor) {
+        return this.msgErro.push("Autor Obrigatorio");
+      }
+      if (!this.livro.url) {
+        return this.msgErro.push("URL Obrigatorio");
+      }
+      if (!this.livro.descricao) {
+        return this.msgErro.push("Descrição Obrigatoria");
+      }
       await updatelivro(this.livroId, { ...this.livro });
       this.$router.push("/");
       this.livro.nome = "";
@@ -79,6 +98,9 @@ input {
 }
 img {
   width: 40%;
+}
+.erro{
+  color:red
 }
 button{
   background-color: #4caf50; /* Green */
