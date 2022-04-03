@@ -1,25 +1,26 @@
 import { createStore } from 'vuex'
-import { useLoadlivros } from '@/firebase'
+import { useLoadlivros, deletelivro } from '@/firebase'
 
 export default createStore({
   state: {
-    livro: {
-      nome: "",
-      autor: "",
-      url: "",
-      genero: "",
-      descricao: "",
-    },
+    livros: []
   },
   getters: {
   },
   mutations: {
-    CARREGA_LIVRO(state, livros){
-      console.log(livros)
-      
+    BANCO_DE_DADOS(state){
+      state.livros =  useLoadlivros()
     }
   },
   actions: {
+    deletarLivro({state}, id){
+      if(confirm('Confirma Operação?')){
+       deletelivro(id)
+       return state.livros = useLoadlivros()
+     }
+     return ;
+    }
+    
   },
   modules: {
   }

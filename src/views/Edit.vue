@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <h1>Edite um Livro</h1>
+    <h2>{{ livro.nome }}</h2>
+    <img :src="livro.url" :alt="livro.descricao" :title="livro.nome" />
     <form @submit.prevent="update">
       <label for="name">Nome:</label>
       <input type="text" id="name" v-model="livro.nome" />
@@ -15,6 +16,7 @@
         <option value="Terror">Terror</option>
         <option value="Romance">Romance</option>
         <option value="Comedia">Comedia</option>
+        <option value="Aventura">Aventura</option>
       </select>
       <label for="descricao">Descrição</label>
       <input type="text" id="descricao" v-model="livro.descricao" />
@@ -63,13 +65,33 @@ export default {
 </script>
 
 <style scoped>
-
-.container{
-    width:500px;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .container form {
   display: flex;
   flex-direction: column;
 }
-
+input {
+  width: 500px;
+}
+img {
+  width: 40%;
+}
+button{
+  background-color: #4caf50; /* Green */
+  border: none;
+  border-radius: 10px;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
 </style>
