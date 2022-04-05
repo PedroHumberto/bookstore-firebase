@@ -64,7 +64,7 @@ export default {
     },
     deletalivro(id) {
       this.$store.dispatch("deletarLivro", id);
-      return this.livros = useLoadlivros();
+      
       /*
         if(confirm('Confirma Operação?')){
            this.$store.dispatch('delete', id)

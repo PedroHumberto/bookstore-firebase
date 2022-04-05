@@ -1,39 +1,18 @@
 <template>
   <div class="container">
-    <h2>{{ livro.nome }}</h2>
-    <img :src="livro.url" :alt="livro.descricao" :title="livro.nome" />
-    <MsgErro :msgErro="msgErro"/>
-    <form @submit.prevent="update">
-      <label for="name">Nome:</label>
-      <input type="text" id="name" v-model="livro.nome" />
-      <label for="name">Autor:</label>
-      <input type="text" id="name" v-model="livro.autor" />
-      <label for="url">URL:</label>
-      <input type="text" id="url" v-model="livro.url" />
-      <label for="genero">Genero:</label>
-      <select v-model="livro.genero">
-        <option value="Drama">Drama</option>
-        <option value="Ficção">Ficção</option>
-        <option value="Terror">Terror</option>
-        <option value="Romance">Romance</option>
-        <option value="Comedia">Comedia</option>
-        <option value="Aventura">Aventura</option>
-      </select>
-      <label for="descricao">Descrição</label>
-      <input type="text" id="descricao" v-model="livro.descricao" />
-      <button class="verde" type="submit">Alterar</button>
-    </form>
+    <h2>Atualize: {{ livro.nome }}</h2>
+     <Formulario :livro="livro" @submit.prevent="update" :msgErro="msgErro" :botao="'Editar'" />
   </div>
 </template>
 
 <script>
 import { getlivro, updatelivro } from "@/firebase";
-import MsgErro from '../components/MensagemErro.vue'
+import Formulario from "../components/Formulario.vue";
 
 
 export default {
   components:{
-    MsgErro
+    Formulario
   },
   data() {
     return {

@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <h2>Cadastre um Livro</h2>
+    
      <img :src="livro.url" :alt="livro.descricao" :title="livro.nome">
-    <form @submit.prevent="cadastrar">
+    <form>
       <MsgErro :msgErro="msgErro"/>
       <label for="name">Nome:</label>
       <input type="text" id="name" v-model="livro.nome" />
@@ -21,53 +21,33 @@
       </select>
       <label for="descricao">Descrição</label>
       <input type="text" id="descricao" v-model="livro.descricao" />
-      <button type="submit">Cadastrar</button>
+      <button type="submit">{{ botao }}</button>
     </form>
   </div>
 </template>
 
 <script>
 //TESTE DE COMPOSITION
-import { createlivro } from "@/firebase";
-import { reactive } from "vue";
+
 import MsgErro from './MensagemErro.vue'
 
 export default {
   components:{
     MsgErro
   },
-  setup() {
-    const livro = reactive({
-      nome: "",
-      autor: "",
-      url: "",
-      genero: "Drama",
-      descricao: "",
-    });
-    const msgErro = reactive([]);
-
-    const cadastrar = async () => {
-      if (!livro.nome) {
-        return msgErro.push("Nome Obrigatório");
-      }
-      if (!livro.autor) {
-        return msgErro.push("Autor Obrigatório");
-      }
-      if (!livro.url) {
-        return msgErro.push("URL Obrigatório");
-      }
-      if (!livro.descricao) {
-        return msgErro.push("Descrição Obrigatória");
-      }
-      await createlivro({ ...livro });
-      livro.nome = "";
-      livro.autor = "";
-      livro.url = "";
-      livro.genero = "";
-      livro.descricao = "";
-    };
-    return { livro, cadastrar, msgErro };
-  },
+  props:{
+    livro:{
+      required: true
+    },
+    msgErro:{
+      type: Array
+    },
+    botao: {
+      required: true,
+      type: String
+    }
+  }
+  
 };
 </script>
 

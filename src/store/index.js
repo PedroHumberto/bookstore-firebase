@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import { useLoadlivros, deletelivro } from '@/firebase'
+import { useLoadlivros, livrosCollection } from '@/firebase'
 
 export default createStore({
   state: {
@@ -13,10 +13,13 @@ export default createStore({
     }
   },
   actions: {
-    deletarLivro({state}, id){
+    
+    deletarLivro({commit}, id){
       if(confirm('Confirma Operação?')){
-       deletelivro(id)
-       return state.livros = useLoadlivros()
+          commit('BANCO_DE_DADOS', {
+            livros: useLoadlivros()
+          })
+          return livrosCollection.doc(id).delete()
      }
      return ;
     }

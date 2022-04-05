@@ -13,7 +13,7 @@ const config = {
 const firebaseApp = firebase.initializeApp(config)
 
 const db = firebaseApp.firestore()
-const livrosCollection = db.collection('livros')
+export const livrosCollection = db.collection('livros')
 
 export const createlivro = livro => {
   return livrosCollection.add(livro)
@@ -28,9 +28,7 @@ export const updatelivro = (id, livro) => {
   return livrosCollection.doc(id).update(livro)
 }
 
-export const deletelivro = id => {
-  return livrosCollection.doc(id).delete()
-}
+
 
 export const useLoadlivros = () => {
   const livros = ref([])
